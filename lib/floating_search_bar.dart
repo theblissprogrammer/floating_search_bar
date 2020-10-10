@@ -6,6 +6,7 @@ export 'ui/sliver_search_bar.dart';
 class FloatingSearchBar extends StatelessWidget {
   FloatingSearchBar({
     this.body,
+    this.scrollController,
     this.drawer,
     this.trailing,
     this.leading,
@@ -24,6 +25,7 @@ class FloatingSearchBar extends StatelessWidget {
 
   FloatingSearchBar.builder({
     this.body,
+    this.scrollController,
     this.drawer,
     this.endDrawer,
     this.trailing,
@@ -47,6 +49,8 @@ class FloatingSearchBar extends StatelessWidget {
   final SliverChildDelegate _childDelagate;
 
   final TextEditingController controller;
+  
+  final ScrollController scrollController;
 
   final ValueChanged<String> onChanged;
 
@@ -67,6 +71,7 @@ class FloatingSearchBar extends StatelessWidget {
       drawer: drawer,
       endDrawer: endDrawer,
       body: NestedScrollView(
+        controller: scrollController,
         headerSliverBuilder: (context, enabled) {
           return [
             SliverPadding(
@@ -76,7 +81,8 @@ class FloatingSearchBar extends StatelessWidget {
                 floating: !pinned,
                 pinned: pinned,
                 title: title ??
-                    TextField(
+                    TextFormField(
+                      textInputAction: TextInputAction.search,
                       controller: controller,
                       decoration: decoration ??
                           InputDecoration.collapsed(
@@ -84,6 +90,7 @@ class FloatingSearchBar extends StatelessWidget {
                           ),
                       autofocus: false,
                       onChanged: onChanged,
+                      onEditingComplete: onTap,
                       onTap: onTap,
                     ),
                 trailing: trailing,
